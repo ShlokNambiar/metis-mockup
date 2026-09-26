@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today · Metis mockup</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/shell.css">
+<style>
+  @keyframes metis-pulse {
+    0%   { transform: scale(1);   opacity: 1; }
+    50%  { transform: scale(1.5); opacity: 0.45; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+  .live-dot { animation: metis-pulse 1.9s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
+  .agent-card { font-family: inherit; }
+  .agent-card:hover { border-color: #D9D4CD !important; }
+</style>
+</head>
+<body>
+<header class="shell-bar">
+  <a class="shell-back" href="../index.html">&#8592; All screens</a>
+  <span class="shell-title">Today &mdash; click an agent to follow their day</span>
+  <span class="shell-tag">Metis &middot; prototype &middot; sample data</span>
+</header>
+<main class="shell-stage">
+
+<div style="width: 1280px; height: 800px; box-sizing: border-box; background: #F3EFE4; display: flex; flex-direction: column; font-family: 'Hanken Grotesk', sans-serif">
+
+  <div style="background: #0E0E0F; padding: 9px 22px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0">
+    <div style="display: flex; align-items: center; gap: 9px">
+      <span class="live-dot" style="width: 7px; height: 7px; border-radius: 50%; background: #57C97C"></span>
+      <span style="font-size: 13px; font-weight: 600; color: #F3EFE4">Running in Mumbai · your VPC · nothing leaves India</span>
+    </div>
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B6560">3 agents working · 2 waiting on you</span>
+  </div>
+
+  <div style="flex-grow: 1; box-sizing: border-box; padding: 24px 34px 26px; display: flex; flex-direction: column; gap: 16px; overflow: hidden">
+
+    <div style="display: flex; align-items: flex-end; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1.2px; color: #BE4A2E">TUESDAY 25 SEPTEMBER · 11:04 IST</span>
+        <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 34px; font-weight: 400; color: #0E0E0F">Your floor, right now</h1>
+      </div>
+      <div style="display: flex; gap: 22px; align-items: flex-end">
+        <div style="display: flex; flex-direction: column; align-items: flex-end">
+          <span style="font-size: 26px; font-weight: 600; color: #0E0E0F">62</span>
+          <span style="font-size: 12px; color: #6B6560">done today</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end">
+          <span style="font-size: 26px; font-weight: 600; color: #0E0E0F">31</span>
+          <span style="font-size: 12px; color: #6B6560">in flight</span>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end">
+          <span style="font-size: 26px; font-weight: 600; color: #BE4A2E">3</span>
+          <span style="font-size: 12px; color: #6B6560">need you</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex-grow: 1; display: flex; gap: 16px; overflow: hidden">
+
+      <div style="width: 452px; display: flex; flex-direction: column; gap: 9px; flex-shrink: 0">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px">
+          <span style="font-size: 11px; font-weight: 700; letter-spacing: 1.3px; color: #9A938C">YOUR TEAM</span>
+          <button type="button" id="clear" style="background: none; border: none; font-family: 'Hanken Grotesk', sans-serif; font-size: 12px; color: #1C46FF; cursor: pointer; padding: 0">click a name to follow one</button>
+        </div>
+        <div id="roster" style="display: flex; flex-direction: column; gap: 9px"></div>
+      </div>
+
+      <div style="flex-grow: 1; background: #FFFFFF; border-radius: 20px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; box-shadow: 0 10px 28px rgba(16,14,12,0.08)">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <span id="feed-label" style="font-size: 11px; font-weight: 700; letter-spacing: 1.3px; color: #9A938C">EVERYTHING HAPPENING</span>
+          <span style="display: flex; align-items: center; gap: 7px">
+            <span class="live-dot" style="width: 6px; height: 6px; border-radius: 50%; background: #57C97C"></span>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B6560">live · writing to the ledger</span>
+          </span>
+        </div>
+        <div id="feed" style="display: flex; flex-direction: column"></div>
+        <div style="display: flex; gap: 10px; align-items: center; padding: 6px 0 0">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9A938C; width: 42px; flex-shrink: 0">11:04</span>
+          <span style="width: 118px; height: 9px; background: #F5F2EC; border-radius: 999px; overflow: hidden; flex-shrink: 0"><span style="display: block; width: 62%; height: 9px; background: #D9D4CD; border-radius: 999px"></span></span>
+          <span style="font-size: 13px; color: #9A938C">still going&#8230;</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #DCECAC; border-radius: 18px; padding: 15px 22px; display: flex; align-items: center; gap: 18px; flex-shrink: 0">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.3px; color: #44403C; flex-shrink: 0">NEEDS YOU</span>
+      <span style="flex-grow: 1; font-size: 16px; color: #0E0E0F">Asha is holding a renewal that expires in 14 days · Meera wants a &#8377;8,240 write-off approved · Nila found two wordings in force</span>
+      <a href="analyst.html" style="background: #0E0E0F; border-radius: 999px; padding: 10px 20px; font-size: 14px; font-weight: 600; color: #F3EFE4; text-decoration: none; flex-shrink: 0">Open the queue</a>
+    </div>
+  </div>
+</div>
+
+</main>
+<script>
+(function () {
+  var AGENTS = [
+    { id: 'asha',  name: 'Asha',  remit: 'renewals',             accent: '#1C46FF', tint: '#E4E9FF', status: 'working', saying: "I have 14 renewals in flight and one I had to stop on." },
+    { id: 'kabir', name: 'Kabir', remit: 'claims intake',        accent: '#BE4A2E', tint: '#FFE7DE', status: 'working', saying: "Nine claims open. Two are waiting on documents from the insured." },
+    { id: 'ravi',  name: 'Ravi',  remit: 'underwriting support', accent: '#0E0E0F', tint: '#DCECAC', status: 'working', saying: "Six schedules queued for extraction. Asha usually sends me these." },
+    { id: 'meera', name: 'Meera', remit: 'reconciliation',       accent: '#0E0E0F', tint: '#E5E1F8', status: 'waiting', saying: "September is matched except one gap. I need a person for that." },
+    { id: 'nila',  name: 'Nila',  remit: 'compliance',           accent: '#44403C', tint: '#F5F2EC', status: 'waiting', saying: "I stopped renewal notices for one class. Two wordings both claim to govern." }
+  ];
+
+  var FEED = [
+    { id: 'nila',  time: '11:03', text: 'Two motor wordings both claim to be in force this week. I have stopped issuing for that class.' },
+    { id: 'asha',  time: '11:01', text: 'Drafted the renewal for MH-14-QT-2290 and sent it up for approval.' },
+    { id: 'ravi',  time: '10:58', text: 'Eleven fields out of a three-page schedule. Two were blank, so I flagged them rather than filling them.' },
+    { id: 'kabir', time: '10:52', text: 'Opened claim CLM-2318. Cover checks out against the policy in force on the loss date.' },
+    { id: 'asha',  time: '10:47', text: 'Pulled premiums for the Pune batch from the Deccan portal, sources recorded.' },
+    { id: 'meera', time: '10:41', text: 'Traced the September gap to three endorsements booked late. Asked Priya to approve the write-off.' },
+    { id: 'asha',  time: '10:36', text: 'Stopped on MH-12-KJ-4471. No prior claim record, and I would not assume it was zero.' }
+  ];
+
+  var picked = null;
+  var roster = document.getElementById('roster');
+  var feedEl = document.getElementById('feed');
+  var label = document.getElementById('feed-label');
+  var clear = document.getElementById('clear');
+
+  function byId(id) {
+    for (var i = 0; i < AGENTS.length; i++) if (AGENTS[i].id === id) return AGENTS[i];
+    return null;
+  }
+
+  function drawRoster() {
+    roster.innerHTML = '';
+    AGENTS.forEach(function (a) {
+      var on = picked === a.id;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'agent-card';
+      b.style.cssText = 'display:flex;align-items:flex-start;gap:12px;width:100%;box-sizing:border-box;text-align:left;cursor:pointer;border-radius:16px;padding:13px 16px;transition:background .2s,border-color .2s;background:' + (on ? a.tint : '#FFFFFF') + ';border:1.5px solid ' + (on ? a.accent : '#FFFFFF');
+      b.innerHTML =
+        '<span class="' + (a.status === 'working' ? 'live-dot' : '') + '" style="width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:6px;background:' + (a.status === 'working' ? '#57C97C' : '#BE4A2E') + '"></span>' +
+        '<span style="display:flex;flex-direction:column;gap:2px;flex-grow:1">' +
+          '<span style="display:flex;align-items:baseline;gap:8px">' +
+            '<span style="font-size:16px;font-weight:600;color:#0E0E0F">' + a.name + '</span>' +
+            '<span style="font-size:12px;color:#6B6560">' + a.remit + '</span>' +
+          '</span>' +
+          '<span style="font-size:14px;line-height:1.35;color:#44403C">' + a.saying + '</span>' +
+        '</span>' +
+        '<span style="flex-shrink:0;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600;background:' + (a.status === 'working' ? '#F5F2EC' : '#DCECAC') + ';color:#44403C">' + a.status + '</span>';
+      b.addEventListener('click', function () {
+        picked = (picked === a.id) ? null : a.id;
+        render();
+      });
+      roster.appendChild(b);
+    });
+  }
+
+  function drawFeed() {
+    feedEl.innerHTML = '';
+    var rows = picked ? FEED.filter(function (e) { return e.id === picked; }) : FEED;
+    rows.forEach(function (e, i) {
+      var a = byId(e.id);
+      var d = document.createElement('div');
+      d.style.cssText = 'display:flex;gap:12px;align-items:flex-start;padding:8px 0' + (i === 0 ? '' : ';border-top:1px solid #F5F2EC');
+      d.innerHTML =
+        '<span style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:#9A938C;width:42px;flex-shrink:0;padding-top:2px">' + e.time + '</span>' +
+        '<span style="width:48px;flex-shrink:0;font-size:14px;font-weight:600;padding-top:1px;color:' + a.accent + '">' + a.name + '</span>' +
+        '<span style="flex-grow:1;font-size:14px;line-height:1.4;color:#44403C">' + e.text + '</span>';
+      feedEl.appendChild(d);
+    });
+  }
+
+  function render() {
+    drawRoster();
+    drawFeed();
+    label.textContent = picked ? (byId(picked).name.toUpperCase() + ' · TODAY') : 'EVERYTHING HAPPENING';
+    clear.textContent = picked ? 'show everyone' : 'click a name to follow one';
+  }
+
+  clear.addEventListener('click', function () { picked = null; render(); });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model routing and policy · Metis mockup</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/shell.css">
+</head>
+<body>
+<header class="shell-bar">
+  <a class="shell-back" href="../index.html">&#8592; All screens</a>
+  <span class="shell-title">Model routing</span>
+  <span class="shell-tag">Metis &middot; prototype &middot; sample data</span>
+</header>
+<main class="shell-stage">
+<div style="width: 1280px; height: 800px; box-sizing: border-box; background: #F3EFE4; display: flex; flex-direction: column">
+
+  <div style="background: #0E0E0F; padding: 9px 22px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0">
+    <div style="display: flex; align-items: center; gap: 9px">
+      <span style="width: 7px; height: 7px; border-radius: 50%; background: #57C97C"></span>
+      <span style="font-size: 13px; font-weight: 600; color: #F3EFE4">Running in Mumbai · your VPC · nothing leaves India</span>
+    </div>
+    <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B6560">role: workspace admin</span>
+  </div>
+
+  <div style="flex-grow: 1; box-sizing: border-box; padding: 28px 44px; display: flex; flex-direction: column; gap: 18px; overflow: hidden">
+
+    <div style="display: flex; flex-direction: column; gap: 5px">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 1.6px; color: #BE4A2E">MODEL ROUTING</span>
+      <h1 style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 32px; font-weight: 400; color: #0E0E0F">The data decides the model. Not the developer.</h1>
+      <p style="margin: 0; max-width: 900px; font-size: 16px; line-height: 1.5; color: #6B6560">Every request is classified before it is routed. A class with no legal destination is refused outright — there is no fallback path that quietly sends it somewhere else.</p>
+    </div>
+
+    <div style="background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 10px 28px rgba(16,14,12,0.08)">
+      <div style="display: flex; gap: 14px; padding-bottom: 8px; border-bottom: 1px solid #F5F2EC">
+        <span style="width: 210px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: #9A938C">DATA CLASS</span>
+        <span style="flex-grow: 1; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: #9A938C">ALLOWED DESTINATION</span>
+        <span style="width: 210px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; color: #9A938C">PINNED TO</span>
+      </div>
+
+      <div style="display: flex; gap: 14px; align-items: center; padding: 8px 0">
+        <span style="width: 210px; font-size: 15px; font-weight: 600; color: #0E0E0F">Policyholder PII</span>
+        <span style="flex-grow: 1; font-size: 15px; color: #44403C">In-VPC serving only · ap-south-1</span>
+        <span style="width: 210px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #44403C">qwen2.5-14b · a3f9c1</span>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; padding: 8px 0; border-top: 1px solid #F5F2EC">
+        <span style="width: 210px; font-size: 15px; font-weight: 600; color: #0E0E0F">Financial · premium, claims</span>
+        <span style="flex-grow: 1; font-size: 15px; color: #44403C">In-VPC serving only · ap-south-1</span>
+        <span style="width: 210px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #44403C">qwen2.5-32b · 7d1e05</span>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; padding: 8px 0; border-top: 1px solid #F5F2EC">
+        <span style="width: 210px; font-size: 15px; font-weight: 600; color: #0E0E0F">Policy wordings · public</span>
+        <span style="flex-grow: 1; font-size: 15px; color: #44403C">In-VPC serving · external permitted</span>
+        <span style="width: 210px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #44403C">qwen2.5-32b · 7d1e05</span>
+      </div>
+      <div style="display: flex; gap: 14px; align-items: center; padding: 10px 14px; background: #F5F2EC; border-radius: 12px">
+        <span style="width: 210px; font-size: 15px; font-weight: 600; color: #6B6560">Anything unclassified</span>
+        <span style="flex-grow: 1; font-size: 15px; font-weight: 600; color: #BE4A2E">Refused. No inference runs.</span>
+        <span style="width: 210px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B6560">fail closed</span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 16px; flex-grow: 1">
+
+      <div style="flex-grow: 1; background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 13px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.3px; color: #9A938C">EXTERNAL PROVIDERS</span>
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; color: #0E0E0F">Frontier API</span>
+            <span style="font-size: 13px; color: #6B6560">non-PII classes only</span>
+          </div>
+          <span style="background: #FFFFFF; border: 1px solid #D9D4CD; border-radius: 999px; padding: 5px 16px; font-size: 13px; color: #6B6560">off</span>
+        </div>
+        <div style="height: 1px; background: #F5F2EC"></div>
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; color: #0E0E0F">Licensed weights in your VPC</span>
+            <span style="font-size: 13px; color: #6B6560">if your risk committee already approved a vendor</span>
+          </div>
+          <span style="background: #0E0E0F; border-radius: 999px; padding: 5px 16px; font-size: 13px; font-weight: 600; color: #F3EFE4">allowed</span>
+        </div>
+        <div style="background: #E4E9FF; border-radius: 12px; padding: 12px 14px; margin-top: 2px">
+          <span style="font-size: 13px; line-height: 1.45; color: #0E0E0F">We are not the model. Bring whichever weights your committee has already signed off — open, or a vendor's — and the evidence layer is unchanged.</span>
+        </div>
+      </div>
+
+      <div style="width: 380px; background: #FFFFFF; border-radius: 20px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.3px; color: #9A938C">WHY VERSIONS ARE PINNED</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #44403C">An audit can ask you to reproduce a decision from eighteen months ago. Every ledger entry stores the weights hash, quantisation, prompt version, index version and seed.</p>
+        <div style="background: #F5F2EC; border-radius: 12px; padding: 12px 14px">
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; color: #44403C">retained weights &nbsp;4 versions<br>oldest &nbsp;q2.5-14b &middot; 8c02ff &middot; Mar 2026<br>replay window &nbsp;7 years</span>
+        </div>
+        <span style="font-size: 13px; line-height: 1.45; color: #6B6560">A hosted model can be retired underneath you. A downloaded one cannot.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</body>
+</html>
