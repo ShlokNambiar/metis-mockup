@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Renewal, End to End · Metis</title>
+<meta name="description" content="A self-running walkthrough of one motor policy renewal through Metis — extraction with citations, the halt, the Teams message, and the sealed audit trail.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:ital,wght@0,400;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --paper: #F3EFE4; --card: #FFFFFF; --ink: #0E0E0F; --body: #44403C;
+  --muted: #6B6560; --faint: #9A938C; --hair: #D9D4CD; --sunk: #F5F2EC;
+  --trace: #1C46FF; --trace-fill: #E4E9FF; --hold: #DCECAC; --warm: #BE4A2E; --go: #3E9C61;
+  --font-ui: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-say: 'Newsreader', Georgia, serif;
+  --font-proof: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-ui);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 56px;
+}
+img { max-width: 100%; }
+.wrap { max-width: 1040px; margin: 0 auto; }
+.topbar {
+  display: flex; align-items: center; gap: 16px; padding: 12px 0;
+}
+.back {
+  color: var(--body); text-decoration: none; font-size: .85rem; font-weight: 600;
+  border: 1px solid var(--hair); border-radius: 999px; padding: 7px 16px; background: var(--card);
+}
+.back:hover { border-color: var(--muted); }
+.resid {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  background: var(--ink); color: var(--paper); border-radius: 14px; padding: 9px 18px;
+}
+.resid b { font-size: .8rem; font-weight: 600; display: flex; align-items: center; gap: 9px; }
+.resid span { font-family: var(--font-proof); font-size: .7rem; color: var(--faint); }
+.pip { width: 7px; height: 7px; border-radius: 50%; background: var(--go); flex: none; }
+.pip.beat { animation: beat 1.9s ease-in-out infinite; }
+@keyframes beat { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(1.55); opacity: .4 } }
+header { padding-block: 30px 10px; }
+.eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--warm); margin: 0 0 10px; }
+h1 { font-family: var(--font-say); font-weight: 400; font-size: clamp(1.9rem, 5vw, 2.9rem); line-height: 1.12; margin: 0 0 12px; text-wrap: balance; }
+.lede { font-size: 1rem; line-height: 1.55; color: var(--body); max-width: 62ch; margin: 0; }
+.say { font-family: var(--font-say); font-size: clamp(1.05rem, 2.6vw, 1.4rem); line-height: 1.4; color: var(--ink); min-height: 3.6em; margin: 22px 0 16px; max-width: 58ch; }
+.say em { font-style: italic; color: var(--warm); }
+.stage { display: grid; grid-template-columns: 1fr 300px; gap: 18px; align-items: start; }
+@media (max-width: 760px) { .stage { grid-template-columns: 1fr; } }
+.vpc { border: 1.5px dashed var(--hair); border-radius: 18px; padding: 14px; position: relative; transition: border-color .4s ease; }
+.vpc.hot { border-color: var(--trace); }
+.vpc-tag { position: absolute; top: -10px; left: 16px; background: var(--paper); font-family: var(--font-proof); font-size: .68rem; color: var(--muted); padding: 0 8px; }
+.doc { background: var(--card); border-radius: 14px; padding: 18px 20px; display: grid; gap: 12px; }
+.doc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.doc-head b { font-size: 1rem; }
+.doc-head span { font-family: var(--font-proof); font-size: .72rem; color: var(--muted); }
+.field { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--sunk); }
+.field:first-of-type { border-top: 0; }
+.field .k { font-size: .86rem; color: var(--muted); }
+.field .v { font-family: var(--font-proof); font-size: .84rem; color: var(--faint); justify-self: end; transition: color .3s ease; }
+.field.on .v { color: var(--ink); }
+.field.on .k { color: var(--body); }
+.cite { font-family: var(--font-proof); font-size: .64rem; color: var(--trace); background: var(--trace-fill); border-radius: 999px; padding: 2px 8px; margin-left: 7px; opacity: 0; transition: opacity .3s ease; }
+.field.on .cite { opacity: 1; }
+.field.miss { background: var(--hold); border-radius: 10px; padding: 9px 11px; border-top-color: transparent; }
+.field.miss .k, .field.miss .v { color: var(--ink); }
+.field.miss .v { font-weight: 500; }
+.stamp { display: inline-flex; align-items: center; gap: 7px; font-size: .78rem; font-weight: 600; border-radius: 999px; padding: 5px 13px; background: var(--sunk); color: var(--body); }
+.stamp.hold { background: var(--hold); color: var(--ink); }
+.stamp.good { background: var(--sunk); color: var(--go); }
+.outside { display: grid; gap: 10px; }
+.outside-tag { font-family: var(--font-proof); font-size: .68rem; color: var(--muted); padding-left: 4px; }
+.teams { background: var(--card); border: 1px solid var(--hair); border-radius: 12px; overflow: hidden; opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .45s ease; }
+.teams.in { opacity: 1; transform: none; }
+.teams-bar { height: 4px; background: var(--hold); }
+.teams-body { padding: 13px 15px; display: grid; gap: 9px; }
+.teams-who { display: flex; align-items: center; gap: 8px; font-size: .8rem; }
+.teams-who b { font-weight: 600; }
+.teams-who i { font-style: normal; font-family: var(--font-proof); font-size: .62rem; color: var(--muted); border: 1px solid var(--hair); border-radius: 4px; padding: 1px 5px; }
+.teams-msg { font-size: .86rem; line-height: 1.45; color: var(--body); margin: 0; }
+.teams-foot { font-family: var(--font-proof); font-size: .64rem; color: var(--muted); }
+.reply { background: var(--sunk); border-radius: 9px; padding: 9px 11px; display: none; }
+.teams.answered .reply { display: block; }
+.reply p { margin: 0; font-size: .82rem; color: var(--ink); }
+.reply span { font-family: var(--font-proof); font-size: .62rem; color: var(--trace); display: block; margin-top: 4px; }
+.ledger { margin-top: 18px; background: var(--card); border-radius: 16px; padding: 16px 18px; }
+.ledger-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.ledger-head b { font-size: .72rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); }
+.ledger-head span { font-family: var(--font-proof); font-size: .7rem; color: var(--muted); }
+.rows { display: grid; gap: 0; overflow-x: auto; }
+.row { display: grid; grid-template-columns: 92px 58px 1fr 104px; gap: 10px; align-items: center; font-family: var(--font-proof); font-size: .72rem; padding: 6px 0; border-top: 1px solid var(--sunk); color: var(--muted); opacity: 0; transform: translateY(-3px); transition: opacity .3s ease, transform .3s ease; min-width: 420px; }
+.row.in { opacity: 1; transform: none; }
+.row:first-child { border-top: 0; }
+.row .id { color: var(--trace); }
+.row .what { color: var(--body); font-family: var(--font-ui); font-size: .8rem; }
+.row .h { justify-self: end; color: var(--faint); opacity: 0; transition: opacity .4s ease; }
+.rows.sealed .row .h { opacity: 1; }
+.row.held .what { color: var(--ink); font-weight: 600; }
+.export { margin-top: 14px; border-radius: 14px; padding: 14px 18px; background: var(--trace-fill); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; opacity: 0; transition: opacity .45s ease; }
+.export.in { opacity: 1; }
+.export b { font-size: .72rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--trace); }
+.export p { margin: 0; font-size: .88rem; color: var(--ink); flex: 1 1 260px; min-width: 0; }
+.controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--hair); }
+button { font-family: var(--font-ui); font-size: .84rem; font-weight: 600; cursor: pointer; border-radius: 999px; padding: 9px 17px; border: 1px solid var(--hair); background: var(--card); color: var(--ink); }
+button:hover { border-color: var(--muted); }
+button.key { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+button:focus-visible { outline: 2px solid var(--trace); outline-offset: 2px; }
+.ticks { display: flex; gap: 4px; margin-left: auto; }
+.tick { width: 22px; height: 5px; border-radius: 999px; background: var(--hair); border: 0; padding: 0; cursor: pointer; }
+.tick.done { background: var(--muted); }
+.tick.now { background: var(--warm); }
+.tick:focus-visible { outline: 2px solid var(--trace); outline-offset: 3px; }
+.foot { margin-top: 24px; font-size: .82rem; line-height: 1.6; color: var(--muted); max-width: 70ch; }
+.foot b { color: var(--body); }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar"><a class="back" href="index.html">&#8592; All screens</a></div>
+
+<div class="resid">
+  <b><span class="pip beat" id="pip"></span> Running in Mumbai · your VPC · nothing leaves India</b>
+  <span>ap-south-1 · residency: IN-only · egress: blocked</span>
+</div>
+
+<header>
+  <p class="eyebrow">Metis · one case, start to finish</p>
+  <h1>One renewal, end to end</h1>
+  <p class="lede">A motor policy comes up for renewal. Watch what the agent does, where it stops, and what the broker is left holding afterwards. Sample data; Sahyadri and Deccan General are invented companies.</p>
+</header>
+
+<p class="say" id="say">A renewal lands in the queue. Fourteen days to expiry.</p>
+
+<div class="stage">
+  <div class="vpc" id="vpc">
+    <span class="vpc-tag">inside your network</span>
+    <div class="doc">
+      <div class="doc-head">
+        <b>MH-12-KJ-4471 · motor renewal</b>
+        <span id="stageName">waiting</span>
+      </div>
+      <div class="field" id="f1"><span class="k">Policy on file</span><span class="v">MH-12-KJ-4471<span class="cite">p.1</span></span></div>
+      <div class="field" id="f2"><span class="k">Premium</span><span class="v">₹4,820<span class="cite">quote p.2</span></span></div>
+      <div class="field" id="f3"><span class="k">Insured value</span><span class="v">₹4,15,000<span class="cite">quote p.2</span></span></div>
+      <div class="field" id="f4"><span class="k">Wording in force that day</span><span class="v">v2.1 · cl. 4.2<span class="cite">located</span></span></div>
+      <div class="field" id="f5"><span class="k">Prior-year claim record</span><span class="v" id="f5v">— searching</span></div>
+      <div><span class="stamp" id="stamp">idle</span></div>
+    </div>
+  </div>
+
+  <div class="outside">
+    <span class="outside-tag">outside · the channel your desk uses</span>
+    <div class="teams" id="teams">
+      <div class="teams-bar"></div>
+      <div class="teams-body">
+        <div class="teams-who"><b>Asha</b> <i>METIS AGENT</i></div>
+        <p class="teams-msg">I couldn’t find the previous claim record for MH-12-KJ-4471, and I didn’t want to assume it was zero. The renewal expires in 14 days.</p>
+        <div class="teams-foot">posted to Renewals desk · 09:15</div>
+        <div class="reply">
+          <p>Priya: it’s in the old system — CLM-2024-0117, no claim.</p>
+          <span>via Teams · Entra ID SSO · identity verified</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ledger">
+  <div class="ledger-head"><b>Evidence ledger</b><span id="chain">building</span></div>
+  <div class="rows" id="rows">
+    <div class="row" id="r1"><span class="id">evt_4a12e0</span><span>09:14:02</span><span class="what">Read expiring policy from BrokerSoft</span><span class="h">0d81aa…4412</span></div>
+    <div class="row" id="r2"><span class="id">evt_5b77c1</span><span>09:14:41</span><span class="what">Retrieve premium from insurer portal</span><span class="h">6e22b0…8831</span></div>
+    <div class="row" id="r3"><span class="id">evt_61a9d3</span><span>09:14:58</span><span class="what">Extract schedule · handed to Ravi</span><span class="h">71ce04…9a1f</span></div>
+    <div class="row" id="r4"><span class="id">evt_6e02f8</span><span>09:15:10</span><span class="what">Check wording v2.1, in force on that date</span><span class="h">c04b8e…33d7</span></div>
+    <div class="row held" id="r5"><span class="id">evt_7f21c9</span><span>09:15:22</span><span class="what">Halt · field not located · no default written</span><span class="h">9b3e77…10ce</span></div>
+    <div class="row" id="r6"><span class="id">evt_88d4a2</span><span>09:31:04</span><span class="what">Human decision · Priya Nadkarni · via Teams</span><span class="h">41cc09…77ab</span></div>
+    <div class="row" id="r7"><span class="id">evt_91b6e5</span><span>09:31:48</span><span class="what">Draft renewal, ready for approval</span><span class="h">b7710f…2d45</span></div>
+  </div>
+</div>
+
+<div class="export" id="export">
+  <b>Audit export</b>
+  <p>Seven events, three document versions, two model versions, one human decision with the channel named. Signed, chain intact, retained seven years.</p>
+</div>
+
+<div class="controls">
+  <button class="key" id="play">Pause</button>
+  <button id="again">Replay</button>
+  <button id="slow">Slower</button>
+  <div class="ticks" id="ticks"></div>
+</div>
+
+<p class="foot"><b>Two things to watch.</b> At 09:15 a required field is missing and the agent stops rather than writing a zero — the halt is a result, not a failure, which is why it is coloured like one. And the answer arrives from Teams, yet lands in the ledger with the same weight as one typed into the console, with the channel and the verified identity attached. Nothing but that notification crossed the boundary.</p>
+
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var say = $('say'), stamp = $('stamp'), stageName = $('stageName'),
+      teams = $('teams'), rows = $('rows'), chain = $('chain'),
+      vpc = $('vpc'), exportBox = $('export'), ticks = $('ticks');
+
+  var STEPS = [
+    { ms: 2600, say: 'A renewal lands in the queue. Fourteen days to expiry.', stage: 'waiting', stamp: ['idle', ''], fields: 0 },
+    { ms: 2600, say: 'Asha opens the policy — under a credential scoped to that one system, not an employee’s login.', stage: 'reading', stamp: ['working', ''], fields: 1, rows: 1, hot: true },
+    { ms: 3000, say: 'She pulls the premium from the insurer’s portal and records the line it came from.', stage: 'extracting', stamp: ['working', ''], fields: 3, rows: 2 },
+    { ms: 2800, say: 'Ravi extracts the schedule. Eleven fields across three pages.', stage: 'extracting', stamp: ['working', ''], fields: 3, rows: 3 },
+    { ms: 3000, say: 'She checks the claims history against the wording in force <em>that day</em> — not today’s version.', stage: 'verifying', stamp: ['working', ''], fields: 4, rows: 4 },
+    { ms: 4200, say: 'The prior-year claim record isn’t there. She stops. <em>She does not write a zero.</em>', stage: 'halted', stamp: ['halted · needs a value', 'hold'], fields: 5, miss: true, rows: 5, hot: false },
+    { ms: 3600, say: 'The case does not sit in a queue nobody opens. It goes to the desk, in Teams.', stage: 'halted', stamp: ['waiting on a person', 'hold'], fields: 5, miss: true, rows: 5, teams: 'in' },
+    { ms: 4000, say: 'Priya answers from her phone. Her name, the time and the channel go into the record.', stage: 'resolved', stamp: ['answered', 'hold'], fields: 5, rows: 6, teams: 'answered' },
+    { ms: 3000, say: 'The field fills from a real source. Verification passes. The renewal is drafted.', stage: 'drafted', stamp: ['verified', 'good'], fields: 5, filled: true, rows: 7, teams: 'answered', hot: true },
+    { ms: 3400, say: 'Every row seals to the one before it. Altering any of them breaks the chain, visibly.', stage: 'sealed', stamp: ['verified', 'good'], fields: 5, filled: true, rows: 7, teams: 'answered', sealed: true },
+    { ms: 5200, say: 'What the broker is left holding is not a log. It is the thing a regulator asks for.', stage: 'complete', stamp: ['complete', 'good'], fields: 5, filled: true, rows: 7, teams: 'answered', sealed: true, exp: true }
+  ];
+
+  var i = 0, timer = null, playing = true, rate = 1;
+
+  STEPS.forEach(function (_, n) {
+    var b = document.createElement('button');
+    b.className = 'tick'; b.type = 'button';
+    b.setAttribute('aria-label', 'Go to step ' + (n + 1) + ' of ' + STEPS.length);
+    b.addEventListener('click', function () { i = n; paint(); schedule(); });
+    ticks.appendChild(b);
+  });
+
+  function paint() {
+    var s = STEPS[i];
+    say.innerHTML = s.say;
+    stageName.textContent = s.stage;
+    stamp.textContent = s.stamp[0];
+    stamp.className = 'stamp' + (s.stamp[1] ? ' ' + s.stamp[1] : '');
+    vpc.classList.toggle('hot', !!s.hot);
+    for (var f = 1; f <= 5; f++) {
+      var el = $('f' + f);
+      el.classList.toggle('on', f <= (s.fields || 0));
+      el.classList.remove('miss');
+    }
+    if (s.miss) $('f5').classList.add('miss');
+    $('f5v').textContent = s.filled ? 'CLM-2024-0117 · no claim' : (s.miss ? '— not found in BrokerSoft' : '— searching');
+    if (s.filled) { $('f5').classList.add('on'); }
+    for (var r = 1; r <= 7; r++) $('r' + r).classList.toggle('in', r <= (s.rows || 0));
+    rows.classList.toggle('sealed', !!s.sealed);
+    chain.textContent = s.sealed ? 'signed · chain intact' : 'building';
+    teams.className = 'teams' + (s.teams ? ' in' : '') + (s.teams === 'answered' ? ' answered' : '');
+    exportBox.classList.toggle('in', !!s.exp);
+    $('pip').classList.toggle('beat', s.stage !== 'complete');
+    Array.prototype.forEach.call(ticks.children, function (t, n) {
+      t.className = 'tick' + (n === i ? ' now' : (n < i ? ' done' : ''));
+    });
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    if (!playing) return;
+    timer = setTimeout(function () { i = (i + 1) % STEPS.length; paint(); schedule(); }, STEPS[i].ms * rate);
+  }
+
+  $('play').addEventListener('click', function () {
+    playing = !playing; this.textContent = playing ? 'Pause' : 'Play'; schedule();
+  });
+  $('again').addEventListener('click', function () {
+    i = 0; playing = true; $('play').textContent = 'Pause'; paint(); schedule();
+  });
+  $('slow').addEventListener('click', function () {
+    rate = rate === 1 ? 1.8 : (rate === 1.8 ? 2.8 : 1);
+    this.textContent = rate === 1 ? 'Slower' : (rate === 1.8 ? 'Slower still' : 'Normal speed');
+    schedule();
+  });
+
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    playing = false; $('play').textContent = 'Play'; i = STEPS.length - 1;
+  }
+
+  paint(); schedule();
+})();
+</script>
+</body>
+</html>
